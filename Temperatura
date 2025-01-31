@@ -1,0 +1,72 @@
+import math
+
+def calcular_temperatura(tiempo, temperatura_inicial, temperatura_ambiente, k):
+    """
+    Calcula la temperatura del cuerpo en un tiempo dado.
+    
+    Parámetros:
+    tiempo (float): Tiempo en horas.
+    temperatura_inicial (float): Temperatura inicial del cuerpo.
+    temperatura_ambiente (float): Temperatura del ambiente.
+    k (float): Parámetro del cuerpo.
+    
+    Retorna:
+    float: Temperatura del cuerpo en el tiempo dado.
+    """
+    return temperatura_ambiente + (temperatura_inicial - temperatura_ambiente) * math.exp(-k * tiempo)
+
+def calcular_tiempo_para_diferencia(temperatura_inicial, temperatura_ambiente, k, diferencia):
+    """
+    Calcula el tiempo necesario para que el cuerpo esté a una cierta diferencia de temperatura respecto al ambiente.
+    
+    Parámetros:
+    temperatura_inicial (float): Temperatura inicial del cuerpo.
+    temperatura_ambiente (float): Temperatura del ambiente.
+    k (float): Parámetro del cuerpo.
+    diferencia (float): Diferencia de temperatura respecto al ambiente.
+    
+    Retorna:
+    float: Tiempo en horas necesario para alcanzar la diferencia de temperatura.
+    """
+    if temperatura_inicial == temperatura_ambiente:
+        raise ValueError("La temperatura inicial no puede ser igual a la temperatura ambiente.")
+    return -math.log(diferencia / (temperatura_inicial - temperatura_ambiente)) / k
+
+# Parámetros dados
+temperatura_inicial = 5  # Temperatura inicial de la lata de refresco en ºC
+temperatura_ambiente = 40  # Temperatura del ambiente en ºC
+k = 0.45  # Parámetro del cuerpo
+
+# Calcular la temperatura a diferentes tiempos
+tiempos = [1, 5, 12, 14]
+for tiempo in tiempos:
+    temperatura_actual = calcular_temperatura(tiempo, temperatura_inicial, temperatura_ambiente, k)
+    print(f"La temperatura después de {tiempo} horas es: {temperatura_actual:.2f} ºC")
+
+# Calcular el tiempo necesario para que la lata esté a 0.5ºC menos que la temperatura ambiente
+diferencia = 0.5
+try:
+    tiempo_espera = calcular_tiempo_para_diferencia(temperatura_inicial, temperatura_ambiente, k, diferencia)
+    print(f"El tiempo necesario para que la lata esté a {diferencia}ºC menos que la temperatura ambiente es: {tiempo_espera:.2f} horas")
+except ValueError as e:
+    print(e)
+
+git clone https://github.com/tu-usuario/temperatura-lata-refresco.git
+   cd temperatura-lata-refresco
+
+git checkout feature-calculo-temperatura
+   # Agrega el código de la función `calcular_temperatura` en un archivo llamado `temperatura.py`
+   git add temperatura.py
+   git commit -m "Agrega función para calcular la temperatura"
+   git push origin feature-calculo-temperatura
+
+git checkout feature-calculo-tiempo
+   # Agrega el código de la función `calcular_tiempo_para_diferencia` en un archivo llamado `tiempo.py`
+   git add tiempo.py
+   git commit -m "Agrega función para calcular el tiempo necesario"
+   git push origin feature-calculo-tiempo
+
+git checkout main
+   git merge feature-calculo-temperatura
+   git merge feature-calculo-tiempo
+   git push origin main
